@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/topcoat-desktop-dark.min.css"/>
+<link  id="hostStyle" rel="stylesheet" href="css/styles.css"/>
+
+<title></title>
+</head>
+
+<body class="hostElt">
+	<div id="content">
+		<div id="mainTabs" class="fullHeight">
+			<div class="topcoat-tab-bar">
+				<ul class="tabs">
+					<li tabset="mainTabs" data-tab="tabNotes">
+						<button id="notesTabLbl" class="topcoat-tab-bar__button odd">Notes</button>
+					</li>
+					<li tabset="mainTabs" data-tab="tabPreflight" class="current">
+						<button id="preflightTabLbl" class="topcoat-tab-bar__button odd">Preflight</button>
+					</li>
+					<li tabset="mainTabs" data-tab="tabSetup">
+						<button id="setupTabLbl" class="topcoat-tab-bar__button odd">Setup</button>
+					</li>
+					<li tabset="mainTabs" data-tab="tabLaunch">
+						<button id="launchTabLbl" class="topcoat-tab-bar__button odd">Launch</button>
+					</li>
+				</ul>
+			</div>
+			
+			<div class="btnBar">
+				<label class="topcoat-radio-button">
+					<input id="btn_link" type="radio" name="linked_data" value="1">
+					<div class="topcoat-radio-button__checkmark"></div>
+					Data Link
+				</label>
+				<button id="btn_split" class="topcoat-button--quiet">Split...</button>
+				<button id="currentID" class="topcoat-button--quiet">ID</button>
+			</div>
+			
+			<div id="tabNotes" class="tab-content ht1 odd">
+        <div id="noteTabs">
+          <div class="topcoat-tab-bar">
+						<ul class="tabs">
+							<li tabset="noteTabs" data-tab="tabCustomer" class="current">
+								<button id="CustomerTabLbl" class="topcoat-tab-bar__button even">Customer</button>
+							</li>
+							<li tabset="noteTabs" data-tab="tabJob">
+								<button id="JobTabLbl" class="topcoat-tab-bar__button even">Job</button>
+							</li>
+							<li tabset="noteTabs" data-tab="tabItem">
+								<button id="ItemTabLbl" class="topcoat-tab-bar__button even">Item</button>
+							</li>
+						</ul>
+					</div>
+					
+					<div class="btnBar">
+						<span class="noteHighlight lrg">test</span>
+						<button id="btn_addNote" class="topcoat-button--quiet">Add Customer Note</button>
+					</div>
+					
+					<div id="tabCustomer" class="tab-content ht2 even current">
+						test content 1
+					</div>
+					<div id="tabJob" class="tab-content ht2 even">
+						test content 2
+					</div>
+					<div id="tabItem" class="tab-content ht2 even">
+						test content 3
+					</div>
+        </div>
+				
+				<div id="newNoteUI">
+					<textarea id="newNote" class="topcoat-textarea" rows="8" cols="36" placeholder=""></textarea>
+					<button id="addNote" class="topcoat-button--cta" kind="Customer">Add Note</button>
+					<button id="cancelAddNote" class="topcoat-button">Cancel</button>
+				</div>
+			</div>
+			
+			<div id="tabPreflight" class="tab-content ht1 odd current">
+				<div id="message" data-alert class="alert-box warning radius">
+					<span class="text"></span>
+				</div>
+				<button id="writeID" class="topcoat-button--quiet">Write ID</button>
+				<button id="readID" class="topcoat-button--quiet">read ID</button>
+			</div>
+			
+			<div id="tabSetup" class="tab-content ht1 odd">
+			</div>
+			
+			<div id="tabLaunch" class="tab-content ht1 odd">
+			</div>
+		</div>
+		
+		<div id="getUserID" class="dPopup">
+			<p>Please enter your initials.</p>
+			<input id="userID" type="text" class="topcoat-text-input" maxlength="3" placeholder="" value="" pattern="^[A-Z]{2,3}$">
+			<button id="setUserID" class="topcoat-button--cta">Save ID</button>
+		</div>
+
+		<div id="notifier" class="topcoat-notification notifier dPopup">
+			<p id="notifierText" class="notifierText"></p>
+			<button id="notifierClose" class="topcoat-button--cta notifierClose">OK</button>
+		</div>
+
+		<div id="retry" class="topcoat-notification notifier dPopup">
+			<p id="retryText" class="notifierText"></p>
+			<button id="retryButton" class="topcoat-button--cta notifierClose">Retry</button>
+		</div>
+
+		<div id="confirmation" class="topcoat-notification notifier dPopup">
+			<p id="confirmationText" class="notifierText"></p>
+			<button id="deny" class="topcoat-button--cta notifierClose">Cancel</button>
+			<button id="confirm" class="topcoat-button--cta notifierClose">OK</button>
+		</div>
+	</div>
+
+	<script src="js/libs/CSInterface.js"></script>
+	<script src="js/libs/jquery-2.0.2.min.js"></script>
+	<script src="js/libs/themeManager.js"></script>
+	<script src="js/userId.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>
