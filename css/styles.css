@@ -58,25 +58,9 @@ pre {
 	font-size: inherit;
 }
 
-.noteHighlight {
-	color: whitesmoke;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	padding-right: 0.563rem;
-  padding-left: 0.563rem
-}
-
-.noteHighlight.lrg {
-	color: #c6c8c8;
-	padding-top: 4px;
-	text-align: right;
-	font-size: 9pt;
-}
-
-.noteHighlight.pad {
-	padding-top: 6px;
-	padding-bottom: 6px;
+label {
+	font-size: 12px;
+	padding-right: 5px;
 }
 
 .disabled {
@@ -205,6 +189,7 @@ ul.tabs li.current button.odd {
 	overflow: auto;
 	padding-left: 10px;
 	padding-right 10px;
+	background-color: blueviolet;
 }
 
 #getUserID {
@@ -237,6 +222,28 @@ ul.tabs li.current button.odd {
 
 /* topcoat overides*/
 
+.topcoat-checkbox {
+	padding-top: 6px;
+	line-height: 12px;
+}
+
+.topcoat-checkbox__checkmark {
+	width: 12px;
+	height: 12px;
+}
+
+.topcoat-checkbox__checkmark:before {
+	width: 12px;
+	height: 12px;
+}
+
+.topcoat-checkbox__checkmark:after {
+	width: 10px;
+	top: 0px;
+}
+
+/**/
+
 .topcoat-tab-bar {
 	height: 23px;
 }
@@ -245,9 +252,10 @@ ul.tabs li.current button.odd {
 	vertical-align: bottom;
 }
 
+/**/
+
 .topcoat-radio-button {
 	padding-top: 6px;
-	font-size: 12px;
 	line-height: 12px;
 }
 
@@ -267,6 +275,8 @@ ul.tabs li.current button.odd {
 	top: 2px;
 	left: 2px;
 }
+
+/**/
 
 .topcoat-select{
 	margin:0;

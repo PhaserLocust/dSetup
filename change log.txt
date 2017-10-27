@@ -1,6 +1,8 @@
 ////////////////////////////////
-//    |) Setup Change Log     //
+//    |)Setup Change Log      //
 ////////////////////////////////
 
 10/??/17 v1.0.0
     - Initial release
+		- Replaces |)Notes extension
+		+ Fixed User ID form validation

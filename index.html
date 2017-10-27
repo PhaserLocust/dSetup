@@ -25,6 +25,9 @@
 					<li tabset="mainTabs" data-tab="tabLaunch">
 						<button id="launchTabLbl" class="topcoat-tab-bar__button odd">Launch</button>
 					</li>
+					<li tabset="mainTabs" data-tab="tabLog">
+						<button id="logTabLbl" class="topcoat-tab-bar__button odd">Log</button>
+					</li>
 				</ul>
 			</div>
 			
@@ -55,7 +58,6 @@
 					</div>
 					
 					<div class="btnBar">
-						<span class="noteHighlight lrg">test</span>
 						<button id="btn_addNote" class="topcoat-button--quiet">Add Customer Note</button>
 					</div>
 					
@@ -78,25 +80,271 @@
 			</div>
 			
 			<div id="tabPreflight" class="tab-content ht1 odd current">
+				<form>
+					<div class="form-group"><label>Supplied Format:</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_format">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Illustrator
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_format">
+							<div class="topcoat-radio-button__checkmark"></div>
+							InDesign
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_format">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Photoshop
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_format">
+							<div class="topcoat-radio-button__checkmark"></div>
+							PDF
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_format">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Other
+						</label>
+					</div>
+					
+					<div class="form-group">
+						<button id="btn_getDieSize" class="topcoat-button">Die Size-></button>
+						<input type="text" class="topcoat-text-input" placeholder="text" value="" disabled>
+					</div>
+					
+					<div class="form-group">
+						<button id="btn_getLinks" class="topcoat-button">Links-></button>
+						<label class="topcoat-checkbox">
+							<input type="checkbox" disabled><div class="topcoat-checkbox__checkmark"></div>
+							Illustrator
+						</label>
+						<label class="topcoat-checkbox">
+							<input type="checkbox" disabled><div class="topcoat-checkbox__checkmark"></div>
+							InDesign
+						</label>
+						<label class="topcoat-checkbox">
+							<input type="checkbox" disabled><div class="topcoat-checkbox__checkmark"></div>
+							Photoshop
+						</label>
+						<label class="topcoat-checkbox">
+							<input type="checkbox" disabled><div class="topcoat-checkbox__checkmark"></div>
+							PDF
+						</label>
+						<label class="topcoat-checkbox">
+							<input type="checkbox" disabled><div class="topcoat-checkbox__checkmark"></div>
+							Other
+						</label>
+					</div>
+						
+					<div class="form-group"><label>Fonts:</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Includes Live Text
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							All Outlined Text
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Live and Outlined Versions
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							No Text
+						</label>
+						<label class="topcoat-checkbox">
+							<input type="checkbox"><div class="topcoat-checkbox__checkmark"></div>
+							Used System Fonts
+						</label>
+					</div>
+					
+					<div class="form-group"><label>Images:</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Includes Live Text
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							All Outlined Text
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Live and Outlined Versions
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							No Text
+						</label>
+						<label class="topcoat-checkbox">
+							<input type="checkbox"><div class="topcoat-checkbox__checkmark"></div>
+							Used System Fonts
+						</label>
+					</div>
+					
+					<div class="form-group"><label>Inks:</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Includes Live Text
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							All Outlined Text
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Live and Outlined Versions
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							No Text
+						</label>
+						<label class="topcoat-checkbox">
+							<input type="checkbox"><div class="topcoat-checkbox__checkmark"></div>
+							Uses Metallic Inks
+						</label>
+					</div>
+					
+					<div class="form-group"><label>Barcode:</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Includes Live Text
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							All Outlined Text
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Live and Outlined Versions
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							No Text
+						</label>
+						<label class="topcoat-checkbox">
+							<input type="checkbox"><div class="topcoat-checkbox__checkmark"></div>
+							Used System Fonts
+						</label>
+					</div>
+					
+					<div class="form-group"><label>White Plate:</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Includes Live Text
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							All Outlined Text
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Live and Outlined Versions
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							No Text
+						</label>
+						<label class="topcoat-checkbox">
+							<input type="checkbox"><div class="topcoat-checkbox__checkmark"></div>
+							Used System Fonts
+						</label>
+					</div>
+					
+					<div class="form-group"><label>Addition Plates:</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Includes Live Text
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							All Outlined Text
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Live and Outlined Versions
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="pf_fonts">
+							<div class="topcoat-radio-button__checkmark"></div>
+							No Text
+						</label>
+						<label class="topcoat-checkbox">
+							<input type="checkbox"><div class="topcoat-checkbox__checkmark"></div>
+							Used System Fonts
+						</label>
+					</div>
+					
+				</form>
+			</div>
+			
+			<div id="tabSetup" class="tab-content ht1 odd">
+					<div class="form-group"><label>Package Type:</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="sup_packageType">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Pouch
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="sup_packageType">
+							<div class="topcoat-radio-button__checkmark"></div>
+							PS Label
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="sup_packageType">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Bread Bag
+						</label>
+						<label class="topcoat-radio-button">
+							<input type="radio" name="sup_packageType">
+							<div class="topcoat-radio-button__checkmark"></div>
+							Sleeve
+						</label>
+					</div>
+			</div>
+			
+			<div id="tabLaunch" class="tab-content ht1 odd">
+			</div>
+			
+			<div id="tabLog" class="tab-content ht1 odd">
 				<div id="message" data-alert class="alert-box warning radius">
 					<span class="text"></span>
 				</div>
 				<button id="writeID" class="topcoat-button--quiet">Write ID</button>
 				<button id="readID" class="topcoat-button--quiet">read ID</button>
 			</div>
-			
-			<div id="tabSetup" class="tab-content ht1 odd">
-			</div>
-			
-			<div id="tabLaunch" class="tab-content ht1 odd">
-			</div>
 		</div>
 		
-		<div id="getUserID" class="dPopup">
-			<p>Please enter your initials.</p>
-			<input id="userID" type="text" class="topcoat-text-input" maxlength="3" placeholder="" value="" pattern="^[A-Z]{2,3}$">
+		<form id="getUserID" class="dPopup">
+			<label for="userID">Please enter your initials.</label>
+			<input id="userID" type="text" class="topcoat-text-input" minlength="2" maxlength="3" placeholder="" value="" pattern="^[A-Z]{2,3}$" required>
 			<button id="setUserID" class="topcoat-button--cta">Save ID</button>
-		</div>
+		</form>
 
 		<div id="notifier" class="topcoat-notification notifier dPopup">
 			<p id="notifierText" class="notifierText"></p>

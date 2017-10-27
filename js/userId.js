@@ -7,7 +7,9 @@ var userID;
 
 var userID_set = function (uid, storeBool) {
 	$('#currentID').text(uid);
-	if (storeBool) {localStorage.setItem("userid", uid); }
+	if (storeBool) {
+		localStorage.setItem("userid", uid);
+	}
 	// console.log(Date() + ' User ID set to ' + uid);
 };
 
@@ -15,11 +17,13 @@ var userID_set = function (uid, storeBool) {
 // info stored in localStorage, on mac: ~/library/Caches/CSXS/cep_cache
 var userID_start = function () {
 	if (typeof (Storage) !== "undefined") {
-		if (localStorage.getItem("userid") === null) {
-			// console.log('need user ID');
+		var storedId = localStorage.getItem("userid");
+		if (storedId === null || storedId === '') {
+			// need user ID, display input
 			$('#noteDisplay').hide();
 			$('#getUserID').show();
 		} else {
+			// set ui with stored id
 			userID_set(localStorage.userid, false);
 		}
 	} else {
