@@ -72,6 +72,30 @@ $(document).ready(function () {
 		// apply response to split item(add ID to xmp, load info, etc)
 	});
 	
+	$('#btn_getFonts').click(function () {
+		console.log('clicked fonts button');
+		csInterface.evalScript('eval_fontList()', function (res) {
+			console.log(res);
+		});
+	});
+	
+	$('#btn_getSelSize').click(function () {
+		console.log('clicked get size button');
+		csInterface.evalScript('eval_selSize()', function (res) {
+			console.log(res);
+		});
+	});
+	
+	$('#btn_getLinks').click(function () {
+		console.log('clicked get links button');
+		csInterface.evalScript('eval_linkList()', function (res) {
+			console.log(res);
+			csInterface.evalScript('eval_hasEmbedded()', function (res) {
+				console.log('has embedded:' + res);
+			});
+		});
+	});
+	
 	/*test only
 	$('#writeID').click(function () {
 		writeID();
