@@ -80,12 +80,37 @@
 			</div>
 			
 			<div id="tabPreflight" class="tab-content ht1 odd current">
-				<button id="btn_getFonts" class="topcoat-button">Fonts-></button>
-				<button id="btn_getLinks" class="topcoat-button">Links-></button>
-				<button id="btn_getSelSize" class="topcoat-button">Die Size-></button>
-				<input type="text" class="topcoat-text-input" placeholder="text" value="" disabled>
+				<div class="block wideBlockDiv">
+					<span class="blockText">Title</span>
+					<label class="topcoat-checkbox blockBtnRight">
+						<input type="checkbox" id="btn_skipPre"><div class="topcoat-checkbox__checkmark"></div>
+						Skip Preflight
+					</label>
+					<span>
+						<button id="btn_preflight" class="topcoat-button">Start-></button>
+					</span>
+				</div>
+				<div class="block lgBlockDiv preCtrl disabled">
+					<button id="btn_getFonts" class="topcoat-button">Fonts-></button>
+				</div>
+				<div  class="block lgBlockDiv preCtrl disabled">
+					<button id="btn_getLinks" class="topcoat-button">Links-></button>
+				</div>
+				<div  class="block lgBlockDiv preCtrl disabled">
+					<button id="btn_getInks" class="topcoat-button">Inks-></button>
+				</div>
+				<div  class="block lgBlockDiv preCtrl disabled">
+					<button id="btn_getSelSize" class="topcoat-button">Die Size-></button>
+				</div>
+				<div  class="block lgBlockDiv preCtrl disabled">
+					<button id="btn_barcode" class="topcoat-button">Barcode</button>
+					<span class="blockText">test text here</span>
+				</div>
+				<div  class="block lgBlockDiv preCtrl disabled">
+					<button id="btn_whiteplate" class="topcoat-button">White Plate</button>
+				</div>
 				
-				
+<!--
 				<form>
 					<div class="form-group"><label>Supplied Format:</label>
 						<label class="topcoat-radio-button">
@@ -301,6 +326,7 @@
 					</div>
 					
 				</form>
+-->
 			</div>
 			
 			<div id="tabSetup" class="tab-content ht1 odd">
@@ -340,11 +366,14 @@
 			</div>
 		</div>
 		
-		<form id="getUserID" class="dPopup">
-			<label for="userID">Please enter your initials.</label>
-			<input id="userID" type="text" class="topcoat-text-input" minlength="2" maxlength="3" placeholder="" value="" pattern="^[A-Z]{2,3}$" required>
-			<button id="setUserID" class="topcoat-button--cta">Save ID</button>
-		</form>
+		<div id="getUserID" class="dPopup">
+			<form id="setUserIDform">
+				<div><label for="userID">Please enter two or three uppercase initials to identify you.</label></div>
+				<br/>
+				<input id="userID" type="text" class="topcoat-text-input" minlength="2" maxlength="3" placeholder="" value="" pattern="^[A-Z]{2,3}$" required>
+				<button type="submit" id="setUserID" class="topcoat-button--cta">Save ID</button>
+			</form>
+		</div>
 
 		<div id="notifier" class="topcoat-notification notifier dPopup">
 			<p id="notifierText" class="notifierText"></p>

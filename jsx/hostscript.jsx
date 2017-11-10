@@ -1,5 +1,6 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 2, maxerr: 50 */
-/*global $, app */
+/*global $, app, remDupStr, beginsWith,
+InkPrintStatus, DocumentColorSpace, XML*/
 
 /* functions used in main.js with csInterface.evalScript() begin with 'eval' */
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "eval" }]*/
@@ -9,6 +10,11 @@
 
 // adds JSON functionality to .jsx, for formatting complex objects to return:
 //@include "json2.jsx";
+
+// helper functions
+//@include "helpers.jsx";
+
+//////////////////////////////////////////
 
 // returns bool
 function eval_docIsOpen() {
@@ -75,6 +81,10 @@ function eval_XMP(idValue) {
 }
 
 // return width and height of selection of active document
+// with multiple selected, seems to return different results than shown in info pallette.
+// perhaps should round values before calculations to match ui?
+// or should/can we get bounds of selection when multiple selected?
+
 function eval_selSize() {
 	var sel = app.activeDocument.selection;
 	var selCount = sel.length;
@@ -107,12 +117,14 @@ function eval_fontList() {
 	for (i = 0; i < storyCount; i++) {
 		thisStory = doc.stories[i];
 		for (j = 0; j < thisStory.textFrames.length; j++) {
+			
+			//if live text inside envelope and cannot edit contents:
+			//Error 1302: No such element Line: 110->  			if (thisStory.textFrames[j].layer.visible)
+			
 			if (thisStory.textFrames[j].layer.visible) {
 				for (k = 0; k < thisStory.textFrames[j].characters.length; k++) {
 					if (fontList.indexOf(thisStory.textFrames[j].characters[k].textFont.name) === -1) {
 						fontList.push(thisStory.textFrames[j].characters[k].textFont.name);
-						
-						//if font not missing, outline text?
 						
 					}
 				}
@@ -123,39 +135,132 @@ function eval_fontList() {
 	return JSON.stringify(fontList);
 }
 
-// return list of linked files used on visible layers of active document
+// returns linked file names 
+// [[linked files],[missing links]]
+// lists linked files used on visible layers of active document
+// inaccessible images inside opacity masks are listed as unknown
+// attempts to return names of missing links
 function eval_linkList() {
 	var doc = app.activeDocument;
 	
-	var i, thisLink, filePath, linkList = [];
-	var linkCount = doc.placedItems.length;
+	var linkCount = doc.placedItems.length; // includes duplicates...
 	if (linkCount === 0) {
 		alert('no placed items in doc');
 		return 'false';
 	}
 	
+	var hasOpacityMask = false, hasMissing = false;
+	
+	var i, thisLink, filePath, linkList = [], unknownCount = 1;
 	for (i = 0; i < linkCount; i++) {
 		thisLink = doc.placedItems[i];
-		if (thisLink.layer.visible && thisLink.layer.printable) {
+		var thisLinkVis, thisLinkPri;
+		//if placeditem inside opacity mask:
+		//Error 1302: No such element Line:149-> when accessing placeditem's layer prop
+		try {
+			thisLinkVis = thisLink.layer.visible;
+			thisLinkPri = thisLink.layer.printable;
+		} catch (e) {
+			hasOpacityMask = true;
+			linkList.push('Unknown Placed Item ' + unknownCount);
+			unknownCount++;
+		}
+		
+		if (!hasOpacityMask && thisLinkVis && thisLinkPri) {
+			try {
+				// throws 'Error 9062: There is no file associated with this item' when link is missing
+				filePath = decodeURI(thisLink.file);
+				linkList.push(filePath.substring(filePath.lastIndexOf('/')+1));
+			} catch (e) {
+				alert(e);
+				hasMissing = true;
+			}
+		}
+	}
+	
+	if (hasMissing) {
+		alert('missing = true')
+		var missingList = findMissingLinkNames(doc);
+	}
+	
+	alert(linkList);
+	alert(missingList);
+	return JSON.stringify([remDupStr(linkList), remDupStr(missingList)]);
+}
+
+// return array of missing linked file names
+// compares doc.placeditems with XMPString info
+function findMissingLinkNames(doc) {
+	alert('called findMissingLinkNames');
+	
+	// get list of all linked images from XMP
+  var x = new XML(doc.XMPString);
+	var m = x.xpath('//xmpMM:Manifest//stRef:filePath')   
+	var i, xmpLinks = [], mLength = m.length(); 
+    
+	if (m !== '') {
+		for (i = 0; i < mLength; i++) {
+			var linkPath = m[i];
+			var linkName = File(linkPath).name;
+			if (xmpLinks.indexOf(linkName) === -1) {
+				xmpLinks.push(linkName);
+			}
+		}
+	}
+
+	// get list of all linked and raster images from Document, excluding linked with missing file property
+	var count = doc.placedItems.length;
+	var thisLink, filePath, linkList = [];
+	for (i = 0; i < count; i++) {
+		thisLink = doc.placedItems[i];
+		try {
+			// throws 'Error 9062: There is no file associated with this item' when link is missing
 			filePath = decodeURI(thisLink.file);
 			linkList.push(filePath.substring(filePath.lastIndexOf('/')+1));
 		}
+		catch (e) {
+			alert('findMissing catch e');
+		}
 	}
-	alert(linkList);
-	return JSON.stringify(linkList);
+	
+	var thisName, parentName;
+	count = doc.rasterItems.length;
+	for (i = 0; i < count; i++) {
+		thisLink = doc.rasterItems[i];
+		thisName = thisLink.name;
+		if (thisName !== '') {
+			parentName = thisLink.parent.name;
+			if (beginsWith(thisName, parentName)) {
+				linkList.push(parentName);
+			}
+		}
+	}
+	
+	// create array of all images from XMP not in document list
+	var missingLinks = [];
+	for (i = 0; i < xmpLinks.length; i++) {
+		thisLink = xmpLinks[i];
+		if (linkList.indexOf(thisLink) === -1) {
+				missingLinks.push(thisLink);
+		}
+	}
+	
+	alert('missing: ' + missingLinks);
+  return missingLinks;
 }
 
 // return 'true' or 'false' if document has raster items on visible printing layers
+// raster items = embedded images
 function eval_hasEmbedded() {
 	var doc = app.activeDocument;
 	
-	var i, thisRast;
 	var rastCount = doc.rasterItems.length;
 	if (rastCount === 0) {
 		alert('no raster items in doc');
 		return 'false';
 	}
 	
+	var i, thisRast;
 	for (i = 0; i < rastCount; i++) {
 		thisRast = doc.rasterItems[i];
 		if (thisRast.layer.visible && thisRast.layer.printable) {
@@ -164,3 +269,37 @@ function eval_hasEmbedded() {
 		}
 	}
 }
+
+// returns 'RGB' or 'CMYK' depending on color mode of current doc
+function eval_colorMode() {
+	var colorSpace = app.activeDocument.documentColorSpace;
+	if (colorSpace === DocumentColorSpace.RGB) {
+		colorSpace = 'RGB';
+	} else {
+		colorSpace = 'CMYK';
+	}
+	alert('colormode= ' + colorSpace);
+	return colorSpace;
+}
+
+// return list of all inks used by current document's current state
+// filters inks by printingStatus property, inks on non-printing and hidden layers are ignored
+// returned list will include process CMY&K inks...
+function eval_inksList() {
+	var doc = app.activeDocument;
+	
+	var inkCount = doc.inkList.length;
+	var i, thisInk, inkList = [];
+	for(i = 0; i < inkCount; i++) {
+		thisInk = doc.inkList[i];
+		if (thisInk.inkInfo.printingStatus === InkPrintStatus.ENABLEINK) {
+			inkList.push(thisInk.name);
+		}
+  }
+	alert(inkList);
+	return JSON.stringify(inkList);
+}
+
+
+
+

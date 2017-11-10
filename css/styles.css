@@ -60,7 +60,6 @@ pre {
 
 label {
 	font-size: 12px;
-	padding-right: 5px;
 }
 
 .disabled {
@@ -134,10 +133,6 @@ ul.tabs li.current button.odd {
 	background: #3f4041;
 }
 
-.tab-content button {
-  float: left;
-}
-
 .tab-content.current {
   display: inherit;
 }
@@ -179,6 +174,35 @@ ul.tabs li.current button.odd {
 	padding: 2px 5px 3px 5px;
 }
 
+.block {
+	display: inline-block;
+	background-color: #595b5b;
+	padding: 3px 6px 3px 6px;
+	margin: 1px;
+	border-radius: 3px;
+	font-size: 12px;
+	vertical-align: top;
+}
+
+.blockText {
+	margin-top: 6px;
+	line-height: 22px;
+	padding: 0px 6px 0px 6px;
+}
+
+.blockBtnRight {
+	float: right;
+	margin-right: 3px;
+}
+
+.lgBlockDiv {
+	width:217px;
+}
+
+.wideBlockDiv {
+	width:451px;
+}
+
 .dPopup {
 	position: absolute;
 	top: 40px;
@@ -187,14 +211,15 @@ ul.tabs li.current button.odd {
 	text-align: center;
 	white-space: normal;
 	overflow: auto;
-	padding-left: 10px;
-	padding-right 10px;
-	background-color: blueviolet;
+	padding: 10px 10px 20px 10px;
+	color: #000;
+	background-color: #c6c8c8;
+	border: 3px solid #3f4041;
+	border-radius: 10px;
 }
 
 #getUserID {
 	display: none;
-	padding-bottom: 20px;
 }
 
 #userID {

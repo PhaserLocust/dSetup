@@ -32,16 +32,18 @@ $(document).ready(function () {
 	
 	//////////////////////////////////
 	
-  $('#setUserID').click(function () {
-		userID_set($('#userID').val(), true);
-		$('#getUserID').hide();
-		$('#noteDisplay').show();
-	});
-    
 	$('#currentID').click(function () {
 		$('#noteDisplay').hide();
 		$('#getUserID').show();
 		$('#userID').focus();
+	});
+	
+	$('#setUserIDform').submit(function (e) {
+		// form uses html5 form validation
+		e.preventDefault();
+		userID_set($('#userID').val(), true);
+		$('#getUserID').hide();
+		$('#noteDisplay').show();
 	});
     
 	$("ul.tabs li").click(function () {
@@ -72,6 +74,35 @@ $(document).ready(function () {
 		// apply response to split item(add ID to xmp, load info, etc)
 	});
 	
+	$('#btn_preflight').click(function () {
+		console.log('clicked preflight');
+		
+		/*
+		// run auto-preflight methods
+		csInterface.evalScript('eval_fontList()', function (res) {
+			console.log(res);
+			csInterface.evalScript('eval_linkList()', function (res) {
+				console.log(res);
+				csInterface.evalScript('eval_hasEmbedded()', function (res) {
+					console.log('has embedded:' + res);
+				});
+			});
+		});
+		*/
+		
+		//enable preflight controls
+		$('.preCtrl').removeClass('disabled');
+		
+		//hide btn_preflight
+		$('#btn_preflight').hide();
+	});
+	
+	$('#btn_skipPre').click(function () {
+		console.log('clicked skipPre');
+		//toggle btn_preflight
+		$('#btn_preflight').prop('disabled', function (i, v) { return !v; });
+	});
+	
 	$('#btn_getFonts').click(function () {
 		console.log('clicked fonts button');
 		csInterface.evalScript('eval_fontList()', function (res) {
@@ -92,6 +123,16 @@ $(document).ready(function () {
 			console.log(res);
 			csInterface.evalScript('eval_hasEmbedded()', function (res) {
 				console.log('has embedded:' + res);
+			});
+		});
+	});
+	
+	$('#btn_getInks').click(function () {
+		console.log('clicked get inks button');
+		csInterface.evalScript('eval_colorMode()', function (res) {
+			console.log(res);
+			csInterface.evalScript('eval_inksList()', function (res) {
+				console.log(res);
 			});
 		});
 	});
