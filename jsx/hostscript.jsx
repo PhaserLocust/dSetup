@@ -5,7 +5,7 @@ InkPrintStatus, DocumentColorSpace, XML*/
 /* functions used in main.js with csInterface.evalScript() begin with 'eval' */
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "eval" }]*/
 
-// adds ES5 fuctionality ot .jsx
+// adds ES5 fuctionality to .jsx
 //@include "es5-shim.jsx";
 
 // adds JSON functionality to .jsx, for formatting complex objects to return:
@@ -81,33 +81,35 @@ function eval_XMP(idValue) {
 }
 
 // return width and height of selection of active document
-// with multiple selected, seems to return different results than shown in info pallette.
-// perhaps should round values before calculations to match ui?
-// or should/can we get bounds of selection when multiple selected?
-
 function eval_selSize() {
 	var sel = app.activeDocument.selection;
 	var selCount = sel.length;
-	if (selCount === 0) {return JSON.stringify(['error', 'no selection'])}
-	var i, thisObj;
-	var left = sel[0].left, top = sel[0].top, right = (left + sel[0].width), bottom = (top - sel[0].height);
+	if (selCount === 0) {
+		alert('Please select the die line to record the dimensions.');
+		return JSON.stringify(['error', 'no selection'])
+	}
+	var i, thisObjGB;
+	var left = sel[0].geometricBounds[0],
+			top = sel[0].geometricBounds[1],
+			right = sel[0].geometricBounds[2],
+			bottom = sel[0].geometricBounds[3];
 	for (i = 1; i < selCount; i++) {
-		thisObj = sel[i];
-		if (thisObj.left < left) {left = thisObj.left}
-		if (thisObj.top > top) {top = thisObj.top}
-		if (thisObj.left + thisObj.width > right) {right = thisObj.left + thisObj.width}
-		if (thisObj.top - thisObj.height < bottom) {bottom = thisObj.top - thisObj.height}
+		thisObjGB = sel[i].geometricBounds;
+		if (thisObjGB[0] < left) {left = thisObjGB[0]}
+		if (thisObjGB[1] > top) {top = thisObjGB[1]}
+		if (thisObjGB[2] > right) {right = thisObjGB[2]}
+		if (thisObjGB[3] < bottom) {bottom = thisObjGB[3]}
 	}
 	
-	alert([right - left, top - bottom]);
-	return JSON.stringify([right - left, top - bottom]);
+	return JSON.stringify([Math.abs(right - left), Math.abs(top - bottom)]);
 }
 
 // return list of fonts used on visible layers of active document
+// return number of stories that cannot be accessed
 function eval_fontList() {
 	var doc = app.activeDocument;
 	
-	var i, j, k, thisStory, fontList = [];
+	var i, j, k, thisStory, thisStoryVis, unknownCount = 0, fontList = [];
 	var storyCount = doc.stories.length;
 	if (storyCount === 0) {
 		alert('no fonts in doc');
@@ -120,19 +122,23 @@ function eval_fontList() {
 			
 			//if live text inside envelope and cannot edit contents:
 			//Error 1302: No such element Line: 110->  			if (thisStory.textFrames[j].layer.visible)
+			try {
+				thisStoryVis = thisStory.textFrames[j].layer.visible
+			} catch (e) {
+				unknownCount++;
+			}
 			
-			if (thisStory.textFrames[j].layer.visible) {
+			if (thisStoryVis) {
 				for (k = 0; k < thisStory.textFrames[j].characters.length; k++) {
 					if (fontList.indexOf(thisStory.textFrames[j].characters[k].textFont.name) === -1) {
 						fontList.push(thisStory.textFrames[j].characters[k].textFont.name);
-						
 					}
 				}
 			}
 		}
 	}
-	alert(fontList);
-	return JSON.stringify(fontList);
+	
+	return JSON.stringify([fontList, unknownCount]);
 }
 
 // returns linked file names 
@@ -145,13 +151,11 @@ function eval_linkList() {
 	
 	var linkCount = doc.placedItems.length; // includes duplicates...
 	if (linkCount === 0) {
-		alert('no placed items in doc');
-		return 'false';
+		return JSON.stringify([[], [], hasEmbedded()]);
 	}
 	
 	var hasOpacityMask = false, hasMissing = false;
-	
-	var i, thisLink, filePath, linkList = [], unknownCount = 1;
+	var i, thisLink, filePath, linkList = [], missingList = [], unknownCount = 0;
 	for (i = 0; i < linkCount; i++) {
 		thisLink = doc.placedItems[i];
 		var thisLinkVis, thisLinkPri;
@@ -162,8 +166,8 @@ function eval_linkList() {
 			thisLinkPri = thisLink.layer.printable;
 		} catch (e) {
 			hasOpacityMask = true;
-			linkList.push('Unknown Placed Item ' + unknownCount);
 			unknownCount++;
+			linkList.push('Unknown Placed Item ' + unknownCount);
 		}
 		
 		if (!hasOpacityMask && thisLinkVis && thisLinkPri) {
@@ -172,43 +176,37 @@ function eval_linkList() {
 				filePath = decodeURI(thisLink.file);
 				linkList.push(filePath.substring(filePath.lastIndexOf('/')+1));
 			} catch (e) {
-				alert(e);
+				//alert(e);
 				hasMissing = true;
 			}
 		}
 	}
 	
 	if (hasMissing) {
-		alert('missing = true')
-		var missingList = findMissingLinkNames(doc);
+		missingList = findMissingLinkNames(doc);
 	}
 	
-	alert(linkList);
-	alert(missingList);
-	return JSON.stringify([remDupStr(linkList), remDupStr(missingList)]);
+	return JSON.stringify([remDupStr(linkList), remDupStr(missingList), hasEmbedded()]);
 }
 
 // return array of missing linked file names
 // compares doc.placeditems with XMPString info
 function findMissingLinkNames(doc) {
-	alert('called findMissingLinkNames');
-	
 	// get list of all linked images from XMP
   var x = new XML(doc.XMPString);
 	var m = x.xpath('//xmpMM:Manifest//stRef:filePath')   
 	var i, xmpLinks = [], mLength = m.length(); 
-    
 	if (m !== '') {
 		for (i = 0; i < mLength; i++) {
 			var linkPath = m[i];
-			var linkName = File(linkPath).name;
+			var linkName = decodeURI(File(linkPath).name);
 			if (xmpLinks.indexOf(linkName) === -1) {
 				xmpLinks.push(linkName);
 			}
 		}
 	}
 
-	// get list of all linked and raster images from Document, excluding linked with missing file property
+	// get list of all linked and raster images from Document, excluding linked with missing file prop
 	var count = doc.placedItems.length;
 	var thisLink, filePath, linkList = [];
 	for (i = 0; i < count; i++) {
@@ -219,10 +217,11 @@ function findMissingLinkNames(doc) {
 			linkList.push(filePath.substring(filePath.lastIndexOf('/')+1));
 		}
 		catch (e) {
-			alert('findMissing catch e');
+			//alert('findMissing catch e');
 		}
 	}
 	
+	// try to get names of raster items
 	var thisName, parentName;
 	count = doc.rasterItems.length;
 	for (i = 0; i < count; i++) {
@@ -245,18 +244,17 @@ function findMissingLinkNames(doc) {
 		}
 	}
 	
-	alert('missing: ' + missingLinks);
+	//alert('missing: ' + missingLinks);
   return missingLinks;
 }
 
 // return 'true' or 'false' if document has raster items on visible printing layers
 // raster items = embedded images
-function eval_hasEmbedded() {
+function hasEmbedded() {
 	var doc = app.activeDocument;
 	
 	var rastCount = doc.rasterItems.length;
 	if (rastCount === 0) {
-		alert('no raster items in doc');
 		return 'false';
 	}
 	
@@ -264,21 +262,19 @@ function eval_hasEmbedded() {
 	for (i = 0; i < rastCount; i++) {
 		thisRast = doc.rasterItems[i];
 		if (thisRast.layer.visible && thisRast.layer.printable) {
-			alert('embedded true');
 			return 'true';
 		}
 	}
 }
 
 // returns 'RGB' or 'CMYK' depending on color mode of current doc
-function eval_colorMode() {
+function colorMode() {
 	var colorSpace = app.activeDocument.documentColorSpace;
 	if (colorSpace === DocumentColorSpace.RGB) {
 		colorSpace = 'RGB';
 	} else {
 		colorSpace = 'CMYK';
 	}
-	alert('colormode= ' + colorSpace);
 	return colorSpace;
 }
 
@@ -296,10 +292,5 @@ function eval_inksList() {
 			inkList.push(thisInk.name);
 		}
   }
-	alert(inkList);
-	return JSON.stringify(inkList);
+	return JSON.stringify([inkList, [], colorMode()]);
 }
-
-
-
-

@@ -5,6 +5,7 @@
 
 // returns array of strings with duplicates removed
 function remDupStr(arr) {
+	if (arr.length === 0) return arr;
 	var seen = {};
 	return arr.filter(function(item) {
 		return seen.hasOwnProperty(item) ? false : (seen[item] = true);

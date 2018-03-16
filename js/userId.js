@@ -1,5 +1,5 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 2, maxerr: 50 */
-/*global $, window */
+/*global $, window, log*/
 
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "userID" }]*/
 
@@ -10,7 +10,7 @@ var userID_set = function (uid, storeBool) {
 	if (storeBool) {
 		localStorage.setItem("userid", uid);
 	}
-	// console.log(Date() + ' User ID set to ' + uid);
+	log('user ID set to ' + uid);
 };
 
 // get and set userID
@@ -19,15 +19,14 @@ var userID_start = function () {
 	if (typeof (Storage) !== "undefined") {
 		var storedId = localStorage.getItem("userid");
 		if (storedId === null || storedId === '') {
-			// need user ID, display input
-			$('#noteDisplay').hide();
+			log('request user ID');
 			$('#getUserID').show();
 		} else {
-			// set ui with stored id
 			userID_set(localStorage.userid, false);
+			log('retrieved user ID');
 		}
 	} else {
-		// console.log('Sorry! No Web Storage support...');
+		log('no web storage support for user ID');
 		userID_set('??', false);
 	}
 };

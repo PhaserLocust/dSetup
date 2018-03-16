@@ -9,6 +9,8 @@
 </head>
 
 <body class="hostElt">
+	<div class="overlay"></div>
+	
 	<div id="content">
 		<div id="mainTabs" class="fullHeight">
 			<div class="topcoat-tab-bar">
@@ -80,34 +82,121 @@
 			</div>
 			
 			<div id="tabPreflight" class="tab-content ht1 odd current">
-				<div class="block wideBlockDiv">
-					<span class="blockText">Title</span>
-					<label class="topcoat-checkbox blockBtnRight">
+				<div id="headerPreflight" class="block wideBlockDiv">
+					<span id="preTitle" class="blockText">Title</span>
+					<label id="skipPre" class="topcoat-checkbox blockBtnRight">
 						<input type="checkbox" id="btn_skipPre"><div class="topcoat-checkbox__checkmark"></div>
 						Skip Preflight
 					</label>
-					<span>
-						<button id="btn_preflight" class="topcoat-button">Start-></button>
-					</span>
+					<button id="btn_preflight" class="topcoat-button">Begin Preflight</button>
+					<button id="btn_preImport" class="topcoat-button blockBtnRight" style="display: none">Import from...</button>
 				</div>
-				<div class="block lgBlockDiv preCtrl disabled">
-					<button id="btn_getFonts" class="topcoat-button">Fonts-></button>
+				<div  class="block wideBlockDiv preCtrl disabled">
+					<button id="btn_getSelSize" class="topcoat-icon-button--quiet" style="">
+						<span class="topcoat-icon" style="background-image:url(img/btn_get_data.png)"></span>
+					</button>
+					<label class="blockTextLbl">Dimensions:</label>
+					<span id="preSizeMM" class="blockText"></span>
+					<span id="preSizeIn" class="blockText"></span>
 				</div>
-				<div  class="block lgBlockDiv preCtrl disabled">
-					<button id="btn_getLinks" class="topcoat-button">Links-></button>
+				<div class="block wideBlockDiv preCtrl disabled">
+					<button id="btn_getFonts" class="topcoat-icon-button--quiet" style="">
+						<span class="topcoat-icon" style="background-image:url(img/btn_get_data.png)"></span>
+					</button>
+					<label class="blockTextLbl">Fonts:</label>
+					<span id="preFonts" class="blockText"></span>
+					<span id="preFontsUnk" class="blockText"></span>
+					<button id="btn_viewFonts" class="topcoat-button blockBtnRight">eye</button>
 				</div>
-				<div  class="block lgBlockDiv preCtrl disabled">
-					<button id="btn_getInks" class="topcoat-button">Inks-></button>
+				<div  class="block wideBlockDiv preCtrl disabled">
+					<button id="btn_getLinks" class="topcoat-icon-button--quiet" style="">
+						<span class="topcoat-icon" style="background-image:url(img/btn_get_data.png)"></span>
+					</button>
+					<label class="blockTextLbl">Links:</label>
+					<span id="preLinks" class="blockText"></span>
+					<span id="preMissing" class="blockText"></span>
+					<span id="preEmbed" class="blockText"></span>
+					<button id="btn_viewLinks" class="topcoat-button  blockBtnRight">eye</button>
 				</div>
-				<div  class="block lgBlockDiv preCtrl disabled">
-					<button id="btn_getSelSize" class="topcoat-button">Die Size-></button>
+				<div  class="block wideBlockDiv preCtrl disabled">
+					<button id="btn_getInks" class="topcoat-icon-button--quiet" style="">
+						<span class="topcoat-icon" style="background-image:url(img/btn_get_data.png)"></span>
+					</button>
+					<label class="blockTextLbl">Inks:</label>
+					<span id="preInks" class="blockText"></span>
+					<span id="preCustom"  class="blockText"></span>
+					<span  id="preMode" class="blockText"></span>
+					<button id="btn_viewInks" class="topcoat-button  blockBtnRight">eye</button>
 				</div>
-				<div  class="block lgBlockDiv preCtrl disabled">
-					<button id="btn_barcode" class="topcoat-button">Barcode</button>
-					<span class="blockText">test text here</span>
+				<div class="block wideBlockDiv preCtrl disabled">
+					<button class="topcoat-icon-button--quiet" style="">
+						<span class="topcoat-icon" style=""></span>
+					</button>
+					<label class="blockTextLbl">Barcode:</label>
+					<label class="topcoat-radio-button">
+						<input type="radio" name="bcNum">
+						<div class="topcoat-radio-button__checkmark"></div>
+						Number Supplied
+					</label>
+					<label class="topcoat-radio-button">
+						<input type="radio" name="bcNum">
+						<div class="topcoat-radio-button__checkmark"></div>
+						Incomplete Number
+					</label>
+					<label class="topcoat-radio-button">
+						<input type="radio" name="bcNum">
+						<div class="topcoat-radio-button__checkmark"></div>
+						None
+					</label>
+					<label id="bcFPO" class="topcoat-checkbox">
+						<input type="checkbox" id="btn_bcFPO"><div class="topcoat-checkbox__checkmark"></div>
+						FPO
+					</label>
 				</div>
-				<div  class="block lgBlockDiv preCtrl disabled">
-					<button id="btn_whiteplate" class="topcoat-button">White Plate</button>
+				<div  class="block wideBlockDiv preCtrl disabled">
+					<button class="topcoat-icon-button--quiet" style="">
+						<span class="topcoat-icon" style=""></span>
+					</button>
+					<label class="blockTextLbl">White Plate:</label>
+					<label class="topcoat-radio-button">
+						<input type="radio" name="wtPlt">
+						<div class="topcoat-radio-button__checkmark"></div>
+						Custom
+					</label>
+					<label class="topcoat-radio-button">
+						<input type="radio" name="wtPlt">
+						<div class="topcoat-radio-button__checkmark"></div>
+						Full
+					</label>
+					<label class="topcoat-radio-button">
+						<input type="radio" name="wtPlt">
+						<div class="topcoat-radio-button__checkmark"></div>
+						Custom Identified
+					</label>
+					<label class="topcoat-radio-button">
+						<input type="radio" name="wtPlt">
+						<div class="topcoat-radio-button__checkmark"></div>
+						None Supplied
+					</label>
+				</div>
+				<div  class="block wideBlockDiv preCtrl disabled">
+					<button class="topcoat-icon-button--quiet" style="">
+						<span class="topcoat-icon" style=""></span>
+					</button>
+					<label class="blockTextLbl">Additional Plates:</label>
+					<label id="pltMatte" class="topcoat-checkbox">
+						<input type="checkbox" id="btn_pltMatte"><div class="topcoat-checkbox__checkmark"></div>
+						Matte
+					</label>
+					<label id="pltGloss" class="topcoat-checkbox">
+						<input type="checkbox" id="btn_pltGloss"><div class="topcoat-checkbox__checkmark"></div>
+						Gloss
+					</label>
+					<label id="pltOther" class="topcoat-checkbox">
+						<input type="checkbox" id="btn_pltOther"><div class="topcoat-checkbox__checkmark"></div>
+						Other:
+					</label>
+					<input type="text" class="topcoat-text-input" placeholder="Plate 1, Plate 2" value="">
 				</div>
 				
 <!--
@@ -355,12 +444,21 @@
 			</div>
 			
 			<div id="tabLaunch" class="tab-content ht1 odd">
+				<div style="margin: 50px;">
+					<select class="topcoat-select">
+						<option value="volvo">Volvo</option>
+						<option value="saab">Saab</option>
+						<option value="mercedes">Mercedes</option>
+						<option value="audi">Audi</option>
+					</select>
+				</div>
 			</div>
 			
 			<div id="tabLog" class="tab-content ht1 odd">
 				<div id="message" data-alert class="alert-box warning radius">
 					<span class="text"></span>
 				</div>
+				<div id="log"></div>
 				<button id="writeID" class="topcoat-button--quiet">Write ID</button>
 				<button id="readID" class="topcoat-button--quiet">read ID</button>
 			</div>
@@ -374,7 +472,22 @@
 				<button type="submit" id="setUserID" class="topcoat-button--cta">Save ID</button>
 			</form>
 		</div>
-
+		
+		<div id="listFonts" class="dPopup">
+			<div class="popUpContent"></div>
+			<button class="topcoat-button--cta dismiss">OK</button>
+		</div>
+		
+		<div id="listLinks" class="dPopup">
+			<div class="popUpContent"></div>
+			<button class="topcoat-button--cta dismiss">OK</button>
+		</div>
+		
+		<div id="listInks" class="dPopup">
+			<div class="popUpContent"></div>
+			<button class="topcoat-button--cta dismiss">OK</button>
+		</div>
+		
 		<div id="notifier" class="topcoat-notification notifier dPopup">
 			<p id="notifierText" class="notifierText"></p>
 			<button id="notifierClose" class="topcoat-button--cta notifierClose">OK</button>
@@ -395,6 +508,7 @@
 	<script src="js/libs/CSInterface.js"></script>
 	<script src="js/libs/jquery-2.0.2.min.js"></script>
 	<script src="js/libs/themeManager.js"></script>
+	<script src="js/helpers.js"></script>
 	<script src="js/userId.js"></script>
 	<script src="js/main.js"></script>
 </body>
